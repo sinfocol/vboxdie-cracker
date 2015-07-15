@@ -53,7 +53,7 @@ function process_keystore($encoded_keystore) {
             'a32pbkdf2_1_salt',             // 32 bytes first PBKDF2 salt
             'Ipbkdf2_1_iterations',         // 4 bytes first PBKDF2 iterations
             'Ievp_decrypt_input_length',    // 4 bytes EVP input length
-            'a*pbkdf2_2_encrypted_password'  // 64 bytes encrypted password for PBKDF2 2
+            'a*pbkdf2_2_encrypted_password' // 64 bytes encrypted password for PBKDF2 2
         );
 
     $keystore = unpack(implode('/', $keystore_format), $keystore);
