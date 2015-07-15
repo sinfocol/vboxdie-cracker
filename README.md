@@ -67,7 +67,7 @@ VirtualBox Disk Image Encryption cracker
         PBKDF2 2 Iterations           2000
         PBKDF2 1 Salt                 8a8f4a94837eec1bb4d69a2e7c9ffadc5e659536df45a81c46662cf66be95e58
         PBKDF2 1 Iterations           2000
-        EVP buffer length             2000
+        EVP buffer length             64
         PBKDF2 2 encrypted password   eaa555f273aeaf9f1157128fd1c3517d7caef43ec9aaa5406917cd1372c5768c
                                       f8857c565967318ce181240fc143956ec2fac3c4ef0e629c18825df228e71ec2
 [+] Cracking finished, measured time: 6.13035 seconds
