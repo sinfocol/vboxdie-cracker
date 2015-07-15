@@ -1,7 +1,7 @@
 <?php
 
 /*
- *  Copyright (C) 2015 Daniel Correa, admin@sinfocol.org
+ *  Copyright (C) 2015 Daniel Correa
  *
  *  http://www.sinfocol.org/
  *  http://null-life.com/
