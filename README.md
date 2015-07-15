@@ -4,6 +4,36 @@
 1. PHP >= 5.2.0
 2. OpenSSL >= 1.0.1 (XTS support)
 
+## Algorithm description
+User password is stored using a combination of PBKDF2 and AES-XTS as following (shown values are fixed at the moment, but they can be controlled inside the file format):
+
+```
+# 32 for AES-XTS128-PLAIN64
+# 64 for AES-XTS256-PLAIN64
+AES_key_length = 32 | 64
+
+AES-password = PBKDF2(algorithm: SHA256,
+                      password: user_password,
+                      salt: random_salt_1,
+                      iterations: 2000,
+                      output_length: AES_key_length)
+
+PBKDF2-decrypted-password = AES_decrypt(key_size: AES_key_length,
+                                        mode: XTS,
+                                        data: random_data
+                                        password: AES-password,
+                                        type: raw,
+                                        iv: NULL);
+
+Stored_hash = PBKDF2(algorithm: SHA256,
+                     password: PBKDF2-decrypted-password,
+                     salt: random_salt_2,
+                     iterations: 2000,
+                     output_length: 32)
+```
+
+The same process is performed each time the user wants to decrypt the machine disk.
+
 ## Example of usage
 ```
 $ php VBOXDIECracker.php
