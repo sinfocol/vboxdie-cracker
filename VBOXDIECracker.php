@@ -126,7 +126,7 @@ function print_keystore($keystore) {
     printf("\t%-30s%s\n", 'PBKDF2 2 Iterations',          $keystore['pbkdf2_2_iterations']);
     printf("\t%-30s%s\n", 'PBKDF2 1 Salt',                bin2hex($keystore['pbkdf2_1_salt']));
     printf("\t%-30s%s\n", 'PBKDF2 1 Iterations',          $keystore['pbkdf2_1_iterations']);
-    printf("\t%-30s%s\n", 'EVP buffer length',            $keystore['pbkdf2_1_iterations']);
+    printf("\t%-30s%s\n", 'EVP buffer length',            $keystore['evp_decrypt_input_length']);
 
     $encrypted_length = strlen($keystore['pbkdf2_2_encrypted_password']);
     printf("\t%-30s%s\n", 'PBKDF2 2 encrypted password',  bin2hex(substr($keystore['pbkdf2_2_encrypted_password'], 0, $encrypted_length / 2)));
