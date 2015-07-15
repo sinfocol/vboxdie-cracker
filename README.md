@@ -23,7 +23,7 @@ PBKDF2-decrypted-password = AES_decrypt(key_size: AES_key_length,
                                         data: random_data
                                         password: AES-password,
                                         type: raw,
-                                        iv: NULL);
+                                        iv: NULL)
 
 Stored_hash = PBKDF2(algorithm: SHA256,
                      password: PBKDF2-decrypted-password,
