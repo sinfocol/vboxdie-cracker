@@ -40,8 +40,8 @@ function process_keystore($encoded_keystore) {
         array(
             'Iheader',                      // 4 bytes keystore header
             'nversion',                     // 2 bytes version
-            'A32algorithm',                 // 32 bytes algorithm name
-            'A32kdf',                       // 32 bytes key derivation function name
+            'a32algorithm',                 // 32 bytes algorithm name
+            'a32kdf',                       // 32 bytes key derivation function name
             'Igeneric_key_length',          // 4 bytes generic length
                                                 // first PBKDF2 output length
                                                 // second PBKDF2 input length
@@ -117,8 +117,8 @@ function crack_keystore($keystore, $wordlist) {
 function print_keystore($keystore) {
     printf("\t%-30s%s\n", 'Header',                       dechex($keystore['header']) . " (SCNE)");
     printf("\t%-30s%s\n", 'Version',                      $keystore['version']);
-    printf("\t%-30s%s\n", 'Algorithm',                    $keystore['algorithm']);
-    printf("\t%-30s%s\n", 'KDF',                          $keystore['kdf']);
+    printf("\t%-30s%s\n", 'Algorithm',                    trim($keystore['algorithm']));
+    printf("\t%-30s%s\n", 'KDF',                          trim($keystore['kdf']));
     printf("\t%-30s%s\n", 'Key length',                   $keystore['generic_key_length']);
     printf("\t%-30s%s\n", 'Final hash',                   bin2hex($keystore['final_hash']));
     printf("\t%-30s%s\n", 'PBKDF2 2 Key length',          $keystore['pbkdf2_2_key_length']);
@@ -139,7 +139,7 @@ function print_keystore($keystore) {
  * Returns the method to be used by openssl_decrypt
  */
 function get_openssl_method($keystore) {
-    switch ($keystore['algorithm']) {
+    switch (trim($keystore['algorithm'])) {
         case 'AES-XTS128-PLAIN64':
             return 'aes-128-xts';
             break;
@@ -157,7 +157,7 @@ function get_openssl_method($keystore) {
  * Returns the hash to be used by PBKDF2
  */
 function get_hash_algorithm($keystore) {
-    switch ($keystore['kdf']) {
+    switch (trim($keystore['kdf'])) {
         case 'PBKDF2-SHA1':
             return 'sha1';
             break;
