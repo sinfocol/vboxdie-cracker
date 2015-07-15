@@ -82,22 +82,32 @@ function process_keystore($encoded_keystore) {
  * Returns the plaintext password used to encrypt de disk of the virtual machine
  */
 function crack_keystore($keystore, $wordlist) {
+    // Open wordlist file
     $fp = fopen($wordlist, 'r');
+    
+    // Continue if it is a valid resource
     if (is_resource($fp)) {
+        // Get hash and method from keystore
         $hash = get_hash_algorithm($keystore);
         $method = get_openssl_method($keystore);
 
         while (!feof($fp)) {
+            // Read each line of the file, it is the user password
             $user_password = trim(fgets($fp));
 
+            // First call to PBKDF2
             $EVP_password = hash_pbkdf2($hash, $user_password, $keystore['pbkdf2_1_salt'], $keystore['pbkdf2_1_iterations'], $keystore['generic_key_length'], true);
 
+            // Here, the password used for the second call to PBKDF2 is decrypted
             $decrypted_password = openssl_decrypt(substr($keystore['pbkdf2_2_encrypted_password'], 0, $keystore['evp_decrypt_input_length']), $method, $EVP_password, OPENSSL_RAW_DATA, '');
             if ($decrypted_password === false) {
                 continue;
             }
 
+            // Final hash is computed
             $final_hash = hash_pbkdf2($hash, $decrypted_password, $keystore['pbkdf2_2_salt'], $keystore['pbkdf2_2_iterations'], $keystore['pbkdf2_2_key_length'], true);
+            
+            // If the computed hash is equal to the stored hash, then we have got the right user password
             if ($final_hash === $keystore['final_hash']) {
                 return $user_password;
             }
@@ -128,6 +138,7 @@ function print_keystore($keystore) {
     printf("\t%-30s%s\n", 'PBKDF2 1 Iterations',          $keystore['pbkdf2_1_iterations']);
     printf("\t%-30s%s\n", 'EVP buffer length',            $keystore['evp_decrypt_input_length']);
 
+    // Print the encrypted password in two lines
     $encrypted_length = strlen($keystore['pbkdf2_2_encrypted_password']);
     printf("\t%-30s%s\n", 'PBKDF2 2 encrypted password',  bin2hex(substr($keystore['pbkdf2_2_encrypted_password'], 0, $encrypted_length / 2)));
     printf("\t%-30s%s\n", '',                             bin2hex(substr($keystore['pbkdf2_2_encrypted_password'], $encrypted_length / 2)));
@@ -139,6 +150,7 @@ function print_keystore($keystore) {
  * Returns the method to be used by openssl_decrypt
  */
 function get_openssl_method($keystore) {
+    // EVP algorithms supported by VirtualBox
     switch (trim($keystore['algorithm'])) {
         case 'AES-XTS128-PLAIN64':
             return 'aes-128-xts';
@@ -157,6 +169,7 @@ function get_openssl_method($keystore) {
  * Returns the hash to be used by PBKDF2
  */
 function get_hash_algorithm($keystore) {
+    // Hash algorithms supported by VirtualBox
     switch (trim($keystore['kdf'])) {
         case 'PBKDF2-SHA1':
             return 'sha1';
