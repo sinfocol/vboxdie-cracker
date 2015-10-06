@@ -1,7 +1,7 @@
 # Virtual Box Disk Image Encryption password cracker
 
 ## Requirements
-1. PHP >= 5.2.0
+1. PHP >= 5.5.0
 2. OpenSSL >= 1.0.1 (XTS support)
 
 ## Algorithm description
